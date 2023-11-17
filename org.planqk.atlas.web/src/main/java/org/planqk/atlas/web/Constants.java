@@ -27,6 +27,10 @@ public final class Constants {
     // URL snippets
     public static final String ALGORITHMS = "algorithms";
 
+    public static final String PATTERNS = "patterns";
+
+    public static final String CONCRETESOLUTIONS = "concrete-solutions";
+
     public static final String ALGORITHM_RELATIONS = "algorithm-relations";
 
     public static final String ALGORITHM_RELATION_TYPES = "algorithm-relation-types";
