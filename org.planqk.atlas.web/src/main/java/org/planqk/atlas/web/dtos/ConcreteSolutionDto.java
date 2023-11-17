@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "packageType", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "concreteSolutionType", visible = true)
 @JsonSubTypes({@JsonSubTypes.Type(value = FileConcreteSolutionDto.class, name = "FILE")})
 public class ConcreteSolutionDto implements Identifyable {
 
@@ -49,5 +49,5 @@ public class ConcreteSolutionDto implements Identifyable {
 
     @NotNull(groups = {ValidationGroups.Update.class, ValidationGroups.Create.class},
              message = "PackageType must not be null!")
-    private ConcreteSolutionType packageType;
+    private ConcreteSolutionType concreteSolutionType;
 }

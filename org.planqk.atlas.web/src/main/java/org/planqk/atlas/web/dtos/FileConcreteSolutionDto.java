@@ -36,7 +36,7 @@ public class FileConcreteSolutionDto extends ConcreteSolutionDto {
 
     @Override
     @Schema(type = "string", allowableValues = {"FILE"})
-    public ConcreteSolutionType getPackageType() {
-        return super.getPackageType();
+    public ConcreteSolutionType getConcreteSolutionType() {
+        return super.getConcreteSolutionType();
     }
 }

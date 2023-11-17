@@ -22,7 +22,11 @@ package org.planqk.atlas.core.services;
 import java.util.UUID;
 
 import org.planqk.atlas.core.model.ConcreteSolution;
+import org.planqk.atlas.core.model.File;
+import org.planqk.atlas.core.model.Implementation;
+import org.planqk.atlas.core.repository.ConcreteSolutionRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public interface ConcreteSolutionService {
@@ -39,5 +43,16 @@ public interface ConcreteSolutionService {
      */
     @Transactional
     ConcreteSolution create(ConcreteSolution concreteSolution, UUID patternId);
+
+    /**
+     * Creates a {@link File} entry in the database from a multipartfile and links it to a given {@link
+     * Implementation}.
+     *
+     * @param ConcreteSolutionId The ID of the {@link ConcreteSolution} we want the {@link File} to be linked.
+     * @param multipartFile           The multipart from which we want to create a File entity and link it to the {@link
+     *                                ConcreteSolution}
+     * @return The created and linked {@link File}
+     */
+    File addFileToConcreteSolution(UUID concreteSolutionId, MultipartFile multipartFile);
     
 }

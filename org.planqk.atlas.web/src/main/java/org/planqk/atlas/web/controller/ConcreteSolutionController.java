@@ -95,8 +95,8 @@ public class ConcreteSolutionController {
                 @ApiResponse(responseCode = "201"),
                 @ApiResponse(responseCode = "400"),
                 @ApiResponse(responseCode = "404",
-                             description = "Not Found. implementation or implementation package with given ID doesn't exist.")
-        }, description = "Create a implementation package of an implementation of an algorithm."
+                             description = "Not Found. given ID doesn't exist.")
+        }, description = "Create a concrete solution of an pattern."
         )
         @PostMapping
         public ResponseEntity<ConcreteSolutionDto> createConcreteSolutionOfPattern(
@@ -106,6 +106,18 @@ public class ConcreteSolutionController {
             final ConcreteSolution concreteSolutionToSave =
                     concreteSolutionService.create(concreteSolution, patternId);
             return new ResponseEntity<>(ModelMapperUtils.convert(concreteSolutionToSave, ConcreteSolutionDto.class), HttpStatus.CREATED);
+        }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "201"),
+                @ApiResponse(responseCode = "400", description = "Bad Request. Invalid request body."),
+        }, description = "Uploads and adds a file to a given concrete solution")
+        @PostMapping(value = "/{concreteSolutionId}/" + Constants.FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        public ResponseEntity<FileDto> createFileForConcreteSolution(
+                @PathVariable UUID concreteSolutionId,
+                @RequestParam("file") MultipartFile multipartFile) {
+            final File file = concreteSolutionService.addFileToConcreteSolution(concreteSolutionId, multipartFile);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ModelMapperUtils.convert(file, FileDto.class));
         }
 
    

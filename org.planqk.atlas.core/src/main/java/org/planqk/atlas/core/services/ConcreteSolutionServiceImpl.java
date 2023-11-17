@@ -22,8 +22,12 @@ package org.planqk.atlas.core.services;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.planqk.atlas.core.model.ConcreteSolution;
+import org.planqk.atlas.core.model.File;
 import org.planqk.atlas.core.repository.ConcreteSolutionRepository;
+import org.planqk.atlas.core.util.ServiceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
 
     private final ConcreteSolutionRepository concreteSolutionRepository;
+    private FileService fileService;
 
     @Override
     @Transactional
@@ -44,5 +49,16 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
         final ConcreteSolution persistedconcreteSolution = concreteSolutionRepository.save(concreteSolution);
         return persistedconcreteSolution;
     }
+
+    @Override
+    public File addFileToConcreteSolution(UUID concreteSolutionId, MultipartFile multipartFile) {
+        final ConcreteSolution concreteSolution =
+                ServiceUtils.findById(concreteSolutionId, ConcreteSolution.class, concreteSolutionRepository);
+        final File file = fileService.create(multipartFile);
+        concreteSolution.setFile(file);
+        concreteSolutionRepository.save(concreteSolution);
+        return file;
+    }
+
 
 }
