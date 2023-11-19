@@ -24,7 +24,9 @@ import java.util.UUID;
 import org.planqk.atlas.core.model.ConcreteSolution;
 import org.planqk.atlas.core.model.File;
 import org.planqk.atlas.core.model.Implementation;
+import org.planqk.atlas.core.model.ImplementationPackage;
 import org.planqk.atlas.core.repository.ConcreteSolutionRepository;
+import org.planqk.atlas.core.repository.ImplementationPackageRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,5 +56,43 @@ public interface ConcreteSolutionService {
      * @return The created and linked {@link File}
      */
     File addFileToConcreteSolution(UUID concreteSolutionId, MultipartFile multipartFile);
+
+    /**
+     * Retrieve zero or one {@link File} entry from the database of {@link File}s that are linked to the given {@link
+     * ConcreteSolution} If no entries are found an empty page is returned.
+     *
+     * @param concreteSolutionId The ID of the {@link ConcreteSolution} we want find the linked {@link File}
+     *                                for
+     * @return The page of queried {@link File}.
+     */
+    File findLinkedFile(UUID concreteSolutionId);
+
+    /**
+     * Find a database entry of a {@link ConcreteSolution} that is already saved in the database.
+     * <p>
+     * If there is no entry found in the database this method will throw a {@link java.util.NoSuchElementException}.
+     *
+     * @param concreteSolutionId The ID of the {@link ConcreteSolution} we want to find
+     * @return The {@link ConcreteSolution} with the given ID
+     */
+    ConcreteSolution findById(UUID concreteSolutionId);
+
+    /**
+     * Update an existing {@link ConcreteSolution} database entry by saving the updated {@link
+     * ConcreteSolution} object to the the database.
+     * <p>
+     * The ID of the {@link ConcreteSolution} parameter has to be set to the ID of the database entry we want to
+     * update. The validation for this ID to be set is done by the Controller layer, which will reject {@link
+     * ConcreteSolution}s without a given ID in its update path. This ID will be used to query the existing {@link
+     * ConcreteSolution} entry we want to update. If no {@link ConcreteSolution} entry with the given ID is
+     * found this method will throw a {@link java.util.NoSuchElementException}.
+     *
+     * @param ConcreteSolution The {@link ConcreteSolutionRepository} we want to update with its updated
+     *                              properties
+     * @return the updated {@link ConcreteSolutionRepository} object that represents the updated status of the
+     * database
+     */
+    @Transactional
+    ConcreteSolution update(ConcreteSolution concreteSolution);
     
 }

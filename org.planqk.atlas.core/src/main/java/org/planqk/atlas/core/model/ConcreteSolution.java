@@ -27,6 +27,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -35,7 +39,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ConcreteSolution extends HasId {
+//@AuditTable("concrete_solution_revisions")
+//@Audited
+public class ConcreteSolution extends KnowledgeArtifact {
 
     private String name;
 
@@ -54,5 +60,6 @@ public class ConcreteSolution extends HasId {
             joinColumns = @JoinColumn(name = "concrete_solution_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id")
     )
+    //@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private File file;
 }

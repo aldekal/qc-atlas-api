@@ -19,11 +19,14 @@
 
 package org.planqk.atlas.core.services;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.planqk.atlas.core.model.ConcreteSolution;
 import org.planqk.atlas.core.model.File;
+import org.planqk.atlas.core.model.ImplementationPackage;
 import org.planqk.atlas.core.repository.ConcreteSolutionRepository;
+import org.planqk.atlas.core.repository.FileRepository;
 import org.planqk.atlas.core.util.ServiceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,7 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
 
     private final ConcreteSolutionRepository concreteSolutionRepository;
     private FileService fileService;
+    private FileRepository fileRepository;
 
     @Override
     @Transactional
@@ -58,6 +62,29 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
         concreteSolution.setFile(file);
         concreteSolutionRepository.save(concreteSolution);
         return file;
+    }
+
+    @Override
+    public File findLinkedFile(UUID concreteSolutionId) {
+        ServiceUtils.throwIfNotExists(concreteSolutionId, ConcreteSolution.class, concreteSolutionRepository);
+        return fileRepository.findByConcreteSolution_Id(concreteSolutionId)
+                .orElseThrow(
+                        () -> new NoSuchElementException("File of ConcreteSolution with ID \"" + concreteSolutionId + "\" does not exist"));
+    }
+
+    @Override
+    public ConcreteSolution findById(UUID concreteSolutionId) {
+        return ServiceUtils.findById(concreteSolutionId, ConcreteSolution.class, concreteSolutionRepository);
+    }
+
+    @Override
+    public ConcreteSolution update(ConcreteSolution concreteSolution) {
+        final ConcreteSolution persistedConcreteSolution = findById(concreteSolution.getId());
+
+        persistedConcreteSolution.setName(concreteSolution.getName());
+        persistedConcreteSolution.setDescription(concreteSolution.getDescription());
+        persistedConcreteSolution.setPattern(concreteSolution.getPattern());
+        return concreteSolutionRepository.save(persistedConcreteSolution);
     }
 
 

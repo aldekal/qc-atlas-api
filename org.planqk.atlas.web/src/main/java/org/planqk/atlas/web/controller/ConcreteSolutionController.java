@@ -89,7 +89,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConcreteSolutionController {
 
-        private ConcreteSolutionService concreteSolutionService;
+        private final ConcreteSolutionService concreteSolutionService;
+        private final FileService fileService;
 
         @Operation(responses = {
                 @ApiResponse(responseCode = "201"),
@@ -120,5 +121,36 @@ public class ConcreteSolutionController {
             return ResponseEntity.status(HttpStatus.CREATED).body(ModelMapperUtils.convert(file, FileDto.class));
         }
 
+        @Operation(responses = {
+                @ApiResponse(responseCode = "200"),
+        }, description = "Retrieve the file of an implementation package")
+        @GetMapping("/{concreteSolutionId}/" + Constants.FILE)
+        public ResponseEntity<FileDto> getFileOfConcreteSolution(
+                @PathVariable UUID concreteSolutionId
+        ) {
+            final File file =
+                    concreteSolutionService.findLinkedFile(concreteSolutionId);
+            return ResponseEntity.ok(ModelMapperUtils.convert(file, FileDto.class));
+        }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "204"),
+                @ApiResponse(responseCode = "400"),
+                @ApiResponse(responseCode = "404", description = "Not Found. Concrete Solution or File with given IDs don't exist")
+        }, description = "Delete a file of an Concrete Solution.")
+        @DeleteMapping("/{concreteSolutionId}/" + Constants.FILE)
+        public ResponseEntity<Void> deleteFileOfConcreteSolution(
+                @PathVariable UUID concreteSolutionId) {
+            final File file =
+                    concreteSolutionService.findLinkedFile(concreteSolutionId);
+            if (file == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            final ConcreteSolution concreteSolution = concreteSolutionService.findById(concreteSolutionId);
+            concreteSolution.setFile(null);
+            fileService.delete(file.getId());
+            concreteSolutionService.update(concreteSolution);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
    
 }
