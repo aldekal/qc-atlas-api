@@ -152,5 +152,26 @@ public class ConcreteSolutionController {
             concreteSolutionService.update(concreteSolution);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "200"),
+                @ApiResponse(responseCode = "404",
+                             description = "File of Concrete Solution with given ID doesn't exist")
+        }, description = "Downloads a specific file content of an concrete solution")
+        @GetMapping("/{concreteSolutionId}/" + Constants.FILE + "/content")
+        public ResponseEntity<byte[]> downloadFileContent(
+                @PathVariable UUID concreteSolutionId
+        ) {
+            final File file =
+                    concreteSolutionService.findLinkedFile(concreteSolutionId);
+            if (file == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.parseMediaType(file.getMimeType()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName())
+                    .body(fileService.getFileContent(file.getId()));
+        }
    
 }
