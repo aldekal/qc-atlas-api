@@ -28,6 +28,8 @@ import org.planqk.atlas.core.model.ImplementationPackage;
 import org.planqk.atlas.core.repository.ConcreteSolutionRepository;
 import org.planqk.atlas.core.repository.FileRepository;
 import org.planqk.atlas.core.util.ServiceUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,6 +87,11 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
         persistedConcreteSolution.setDescription(concreteSolution.getDescription());
         persistedConcreteSolution.setPattern(concreteSolution.getPattern());
         return concreteSolutionRepository.save(persistedConcreteSolution);
+    }
+
+    @Override
+    public Page<ConcreteSolution> findAll(@NonNull Pageable pageable) {
+        return this.concreteSolutionRepository.findAll(pageable);
     }
 
 
