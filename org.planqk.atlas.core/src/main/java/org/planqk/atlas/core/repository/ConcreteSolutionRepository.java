@@ -32,6 +32,6 @@ import org.springframework.stereotype.Repository;
 @RepositoryRestResource(exported = false)
 public interface ConcreteSolutionRepository extends JpaRepository<ConcreteSolution, UUID> {
 
-    //Page<ConcreteSolution> findConcreteSolutionByPatternId(UUID patternId, Pageable pageable);
+    Page<ConcreteSolution> findByPattern(UUID patternId, Pageable pageable);
     
 }

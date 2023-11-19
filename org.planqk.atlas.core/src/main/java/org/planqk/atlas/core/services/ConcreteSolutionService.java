@@ -107,5 +107,16 @@ public interface ConcreteSolutionService {
      * @return The page of queried {@link ConcreteSolution} entries
      */
     Page<ConcreteSolution> findAll(Pageable pageable);
+
+    /**
+     * Retrieve multiple {@link ConcreteSolution} entries from the database.
+     * <p>
+     * The amount of entries is based on the given {@link Pageable} parameter. If the {@link Pageable} is unpaged a
+     * {@link Page} with all entries is queried.
+     *
+     * @param pageable The page information, namely page size and page number, of the page we want to retrieve
+     * @return The page of queried {@link ConcreteSolution} entries
+     */
+    Page<ConcreteSolution> findByPatternId(UUID patternId, Pageable pageable);
     
 }

@@ -19,42 +19,20 @@
 
 package org.planqk.atlas.web.controller;
 
-import java.util.Collection;
 import java.util.UUID;
 
-import org.planqk.atlas.core.model.ComputeResourceProperty;
 import org.planqk.atlas.core.model.ConcreteSolution;
 import org.planqk.atlas.core.model.File;
-import org.planqk.atlas.core.model.Implementation;
-import org.planqk.atlas.core.model.ImplementationPackage;
-import org.planqk.atlas.core.model.Publication;
-import org.planqk.atlas.core.model.Tag;
-import org.planqk.atlas.core.services.ComputeResourcePropertyService;
 import org.planqk.atlas.core.services.ConcreteSolutionService;
 import org.planqk.atlas.core.services.FileService;
-import org.planqk.atlas.core.services.ImplementationPackageService;
-import org.planqk.atlas.core.services.ImplementationService;
-import org.planqk.atlas.core.services.LinkingService;
-import org.planqk.atlas.core.services.PublicationService;
-import org.planqk.atlas.core.services.SoftwarePlatformService;
-import org.planqk.atlas.core.services.TagService;
 import org.planqk.atlas.web.Constants;
-import org.planqk.atlas.web.dtos.ComputeResourcePropertyDto;
 import org.planqk.atlas.web.dtos.ConcreteSolutionDto;
-import org.planqk.atlas.web.dtos.DiscussionCommentDto;
-import org.planqk.atlas.web.dtos.DiscussionTopicDto;
 import org.planqk.atlas.web.dtos.FileDto;
-import org.planqk.atlas.web.dtos.ImplementationDto;
-import org.planqk.atlas.web.dtos.ImplementationPackageDto;
-import org.planqk.atlas.web.dtos.PublicationDto;
-import org.planqk.atlas.web.dtos.SoftwarePlatformDto;
-import org.planqk.atlas.web.dtos.TagDto;
 import org.planqk.atlas.web.utils.ListParameters;
 import org.planqk.atlas.web.utils.ListParametersDoc;
 import org.planqk.atlas.web.utils.ModelMapperUtils;
 import org.planqk.atlas.web.utils.ValidationGroups;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,7 +43,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -172,6 +149,22 @@ public class ConcreteSolutionController {
                     .contentType(MediaType.parseMediaType(file.getMimeType()))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName())
                     .body(fileService.getFileContent(file.getId()));
+        }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "200"),
+                @ApiResponse(responseCode = "400"),
+                @ApiResponse(responseCode = "404",
+                             description = "Not Found. Pattern with given ID doesn't exist.")
+        }, description = "Retrieve concrete solutions of an Pattern. If none are found an empty list is returned."
+        )
+        @ListParametersDoc
+        @GetMapping
+        public ResponseEntity<Page<ConcreteSolutionDto>> getConcreteSolutionsOfPattern(
+                @PathVariable UUID patternId,
+                @Parameter(hidden = true) ListParameters listParameters) {
+            final var concreteSolutions =concreteSolutionService.findByPatternId(patternId, listParameters.getPageable());
+            return ResponseEntity.ok(ModelMapperUtils.convertPage(concreteSolutions, ConcreteSolutionDto.class));
         }
    
 }

@@ -94,5 +94,10 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
         return this.concreteSolutionRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<ConcreteSolution> findByPatternId(UUID patternId, Pageable pageable) {
+        return concreteSolutionRepository.findByPattern(patternId, pageable);
+    }
+
 
 }
