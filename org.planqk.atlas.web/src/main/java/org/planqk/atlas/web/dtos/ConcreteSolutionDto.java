@@ -50,4 +50,16 @@ public class ConcreteSolutionDto implements Identifyable {
     @NotNull(groups = {ValidationGroups.Update.class, ValidationGroups.Create.class},
              message = "PackageType must not be null!")
     private ConcreteSolutionType concreteSolutionType;
+
+    private boolean isStartPattern;
+
+    private boolean isEndPattern;
+
+    private int qubitCount;
+
+    private String inputParameterFormat;
+
+    private boolean hasHeader;
+
+    private boolean hasMeasurment;
 }

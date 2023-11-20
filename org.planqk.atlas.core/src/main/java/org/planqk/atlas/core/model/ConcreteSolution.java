@@ -27,10 +27,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -50,6 +46,18 @@ public class ConcreteSolution extends KnowledgeArtifact {
     private UUID pattern;
 
     private ConcreteSolutionType concreteSolutionType;
+
+    private boolean isStartPattern;
+
+    private boolean isEndPattern;
+
+    private int qubitCount;
+
+    private String inputParameterFormat;
+
+    private boolean hasHeader;
+
+    private boolean hasMeasurment;
 
     //TODO if the ConcreteSolution is deleted, the associated File will also be deleted.
 
