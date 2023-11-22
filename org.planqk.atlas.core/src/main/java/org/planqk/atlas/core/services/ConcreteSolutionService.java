@@ -116,5 +116,7 @@ public interface ConcreteSolutionService {
      * @return The page of queried {@link ConcreteSolution} entries
      */
     Page<ConcreteSolution> findByPatternId(UUID patternId, Pageable pageable);
+
+    void delete(UUID concreteSolutionId);
     
 }

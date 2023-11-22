@@ -99,5 +99,10 @@ public class ConcreteSolutionServiceImpl implements ConcreteSolutionService {
         return concreteSolutionRepository.findByPattern(patternId, pageable);
     }
 
+    @Override
+    public void delete(UUID concreteSolutionId) {
+        this.concreteSolutionRepository.deleteById(concreteSolutionId);
+    }
+
 
 }

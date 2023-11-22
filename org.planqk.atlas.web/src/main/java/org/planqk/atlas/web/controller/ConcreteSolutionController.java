@@ -166,5 +166,35 @@ public class ConcreteSolutionController {
             final var concreteSolutions =concreteSolutionService.findByPatternId(patternId, listParameters.getPageable());
             return ResponseEntity.ok(ModelMapperUtils.convertPage(concreteSolutions, ConcreteSolutionDto.class));
         }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "200"),
+                @ApiResponse(responseCode = "400"),
+                @ApiResponse(responseCode = "404",
+                             description = "Not Found. Concrete Solution with given ID doesn't exist.")
+        }, description = "Retrieve a concrete solution with the given ID. If none are found an empty list is returned."
+        )
+        @ListParametersDoc
+        @GetMapping("/{concreteSolutionId}")
+        public ResponseEntity<ConcreteSolutionDto> getConcreteSolution(
+                @PathVariable UUID concreteSolutionId) {
+            final var concreteSolution =concreteSolutionService.findById(concreteSolutionId);
+            return ResponseEntity.ok(concreteSolution != null ? ModelMapperUtils.convert(concreteSolution, ConcreteSolutionDto.class) : null);
+        }
+
+        @Operation(responses = {
+                @ApiResponse(responseCode = "200"),
+                @ApiResponse(responseCode = "400"),
+                @ApiResponse(responseCode = "404",
+                             description = "Not Found. Concrete Solution with given ID doesn't exist.")
+        }, description = "Delete a concrete solution with the given ID."
+        )
+        @ListParametersDoc
+        @DeleteMapping("/{concreteSolutionId}")
+        public ResponseEntity<Void> deleteConcreteSolution(
+                @PathVariable UUID concreteSolutionId) {
+            this.concreteSolutionService.delete(concreteSolutionId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
    
 }
