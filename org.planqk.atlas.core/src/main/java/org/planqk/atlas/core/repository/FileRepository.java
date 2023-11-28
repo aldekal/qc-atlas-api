@@ -38,12 +38,4 @@ public interface FileRepository extends JpaRepository<File, UUID> {
             "WHERE implementation_package_file.implementation_package_id = :implementationPackageId",
            nativeQuery = true)
     Optional<File> findByImplementationPackage_Id(@Param("implementationPackageId") UUID implementationPackageId);
-
-    @Query(value = "SELECT * " +
-            "FROM file " +
-            "INNER JOIN concrete_solution_file on file.id = concrete_solution_file.file_id " +
-            "INNER JOIN knowledge_artifact ka on file.id = ka.id " +
-            "WHERE concrete_solution_file.concrete_solution_id = :concreteSolutionId",
-           nativeQuery = true)
-    Optional<File> findByConcreteSolution_Id(@Param("concreteSolutionId") UUID concreteSolutionId);
 }
